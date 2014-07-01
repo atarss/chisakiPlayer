@@ -1,6 +1,4 @@
 var fs = require("fs");
-var fileList = new Array();
-var startLocation = "/home/andy/";
 
 function strIsEndWith(longStr, shortStr) {
 	var longLength = longStr.length;
@@ -12,21 +10,23 @@ function strIsEndWith(longStr, shortStr) {
 	}
 }
 
-function readDirRec(location) {
-	// Location should be end with '/'
+function readDirRec(location, patternStr, fileList) {
+	// **ATTENTION**  Location should be end with '/'
 
-	// console.log("Going into " + location);
 	var files = fs.readdirSync(location);
-
 	for (i in files) {
 		var thisAbsLocation = location + files[i];
 		stat = fs.lstatSync(thisAbsLocation);
 		if (stat.isDirectory()){
-			// console.log(thisAbsLocation + "/");
 			readDirRec(thisAbsLocation + "/");
+		} else if (strIsEndWith(thisAbsLocation, patternStr)) {
+			fileList.push(thisAbsLocation);
 		}
 	}
 }
 
-
-console.log(strIsEndWith("asdashdkahsdk.mp3", ".mp3"));
+exports.getFileFromDirByPattern = function(pathLocation, patternStr) {
+	var fileList = new Array();
+	readDirRec(pathLocation, patternStr, fileList);
+	return fileList;
+}
