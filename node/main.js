@@ -1,19 +1,21 @@
-var fileName = "/run/media/andy/9868B60F68B5EBDE/mp3lib/ACG/Single/[20140205][ebb and flow][Ray]/01. ebb and flow.mp3";
+// var fileName = "/run/media/andy/9868B60F68B5EBDE/mp3lib/ACG/Single/[20140205][ebb and flow][Ray]/01. ebb and flow.mp3";
+var pathName = "/home/andy";
 
 var http = require("http");
 var fs = require('fs');
 var mm = require('musicmetadata');
+var chisakiFile = require("./file.js");
 
-// create a new parser from a node ReadStream
+var fileList = chisakiFile.getFileFromDirByPattern(path, ".mp3");
+var counter = fileList.length;
 
-http.createServer(function (req, res) {
+for (index in fileList) {
+  var fileName = fileList[index];
   var parser = mm(fs.createReadStream(fileName));
+  parser.thisIndex = index;
 
-  // listen for the metadata event
-  parser.on('metadata', function (result) {
-    console.log(result);
-    res.writeHead(200, {'Content-Type': 'image/jpeg'});
-    res.end(result.picture[0].data);
+  parser.on('title', function (result) {
+  	parser.stream.close();
+    console.log("[" + this.thisIndex + "] " + result);
   });
-
-}).listen(1337, '127.0.0.1');
+}

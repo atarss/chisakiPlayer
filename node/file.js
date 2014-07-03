@@ -18,7 +18,7 @@ function readDirRec(location, patternStr, fileList) {
 		var thisAbsLocation = location + files[i];
 		stat = fs.lstatSync(thisAbsLocation);
 		if (stat.isDirectory()){
-			readDirRec(thisAbsLocation + "/");
+			readDirRec(thisAbsLocation + "/", patternStr, fileList);
 		} else if (strIsEndWith(thisAbsLocation, patternStr)) {
 			fileList.push(thisAbsLocation);
 		}
@@ -30,3 +30,4 @@ exports.getFileFromDirByPattern = function(pathLocation, patternStr) {
 	readDirRec(pathLocation, patternStr, fileList);
 	return fileList;
 }
+
