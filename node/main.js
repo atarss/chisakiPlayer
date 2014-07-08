@@ -1,13 +1,15 @@
 // var fileName = "/run/media/andy/9868B60F68B5EBDE/mp3lib/ACG/Single/[20140205][ebb and flow][Ray]/01. ebb and flow.mp3";
-var pathName = "/home/andy";
+var pathName = "/run/media/andy/9868B60F68B5EBDE/mp3lib/ACG/Album/";
 
 var http = require("http");
 var fs = require('fs');
 var mm = require('musicmetadata');
 var chisakiFile = require("./file.js");
 
-var fileList = chisakiFile.getFileFromDirByPattern(path, ".mp3");
+var fileList = chisakiFile.getFileFromDirByPattern(pathName, ".mp3");
 var counter = fileList.length;
+
+// emitter.setMaxListeners(10)
 
 for (index in fileList) {
   var fileName = fileList[index];
@@ -19,3 +21,4 @@ for (index in fileList) {
     console.log("[" + this.thisIndex + "] " + result);
   });
 }
+
