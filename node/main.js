@@ -17,8 +17,7 @@ for (index in fileList) {
   parser.thisIndex = index;
 
   parser.on('title', function (result) {
-  	parser.stream.close();
+    parser.stream.close();
     console.log("[" + this.thisIndex + "] " + result);
   });
 }
-

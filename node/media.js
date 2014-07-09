@@ -14,13 +14,13 @@ process.setMaxListeners(10);
 
 var consoleClock = setInterval(function(){
   if (counter == 0) {
-  	console.log("***** All Done *****");
-  	clearInterval(consoleClock);
+    console.log("***** All Done *****");
+    clearInterval(consoleClock);
   } else {
-  	if (! counter == lastCounter) {
-  	  console.log("["+counter+ "/" +fileList.length+"] to be done...");
-  	  lastCounter = counter;
-  	}
+    if (! counter == lastCounter) {
+      console.log("["+counter+ "/" +fileList.length+"] to be done...");
+      lastCounter = counter;
+    }
   }
 }, 100);
 
@@ -30,7 +30,7 @@ for (index in fileList) {
   parser.thisIndex = index;
 
   parser.on('title', function (result) {
-  	parser.stream.close();
+    parser.stream.close();
     console.log("[" + this.thisIndex + "] " + result);
     counter -= 1;
   });

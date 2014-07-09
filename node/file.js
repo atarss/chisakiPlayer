@@ -30,4 +30,3 @@ exports.getFileFromDirByPattern = function(pathLocation, patternStr) {
 	readDirRec(pathLocation, patternStr, fileList);
 	return fileList;
 }
-
