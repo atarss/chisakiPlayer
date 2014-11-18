@@ -3,7 +3,7 @@
 var fs = require("fs");
 var spawn = require('child_process').spawn;
 
-exports.worker = function(req, resp) {
+exports.worker = function(req, resp, httpReq) {
 	var query = req.query;
 	if (query.id) {
 		apiDb.getInfoFromId(query.id, function(res){
@@ -15,6 +15,10 @@ exports.worker = function(req, resp) {
 						//start to stream
 						var newSpawn = spawn("lame", ["--mp3input", "-b"+br, filePath, "-"]);
 						newSpawn.stdout.pipe(resp);
+
+						httpReq.on("close", function(){
+							newSpawn.kill();
+						});
 					} else {
 						resp.end(JSON.stringify({
 							error : {
