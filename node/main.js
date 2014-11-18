@@ -23,14 +23,3 @@ apiUtils.sysLog("Mongodb URI: " + apiConfig.mongoServerUrl);
 var apiFrame = require("./api.js");
 apiFrame.listen(apiConfig.serverAddress, apiConfig.serverPort);
 apiUtils.sysLog("HTTP Server Ready.");
-
-// var queue = new processQueue();
-// queue.maxWorkers = 5;
-// for (i = 0; i<2; i++) {
-// 	queue.push(function(callback){
-// 		console.log(i);
-// 		callback();
-// 	});
-// }
-
-// queue.startQueue();
