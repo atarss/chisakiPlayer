@@ -6,7 +6,15 @@ exports.worker = function(req, resp, httpReq) {
 	if (query.id) {
 		apiDb.getInfoFromId(query.id, function(res){
 			if (res) {
-				resp.end(JSON.stringify(res));
+				resp.end(JSON.stringify({
+					id : res._id,
+					title : res.title,
+					album : res.album,
+					artist : res.artist,
+					genre : res.genre,
+					year : res.year,
+					fileName : res.fileName
+				}));
 			} else {
 				resp.end(JSON.stringify({
 					error : {

@@ -91,7 +91,24 @@ var rebuildMusicLibrary = function(tagArr, callback) {
 	});
 }
 
-var showMusicLibrary = function(callback) {
+var showMusicLibrarySimple = function(callback) {
+	simpleConnection(defaultMongoAddress, function(db){
+		var dbCollection = db.collection("musicLibrary");
+		dbCollection.find({} , {_id : 1 , title : 1 , artist : 1 , album : 1, duration : 1}).toArray(function(err, docs){
+			db.close();
+			if (err) {
+				apiUtils.sysErr(err);
+			} else {
+				if (callback) {
+					callback(docs);
+				}
+			}
+		})
+	});
+}
+
+
+var showMusicLibraryId = function(callback) {
 	simpleConnection(defaultMongoAddress, function(db){
 		var dbCollection = db.collection("musicLibrary");
 		dbCollection.find({} , {_id : 1}).toArray(function(err, docs){
@@ -138,6 +155,7 @@ exports.insertSingleDocument = insertSingleDocument;
 
 exports.clearMusicLibrary = clearMusicLibrary;
 exports.rebuildMusicLibrary = rebuildMusicLibrary;
-exports.showMusicLibrary = showMusicLibrary;
+exports.showMusicLibraryId = showMusicLibraryId;
+exports.showMusicLibrarySimple = showMusicLibrarySimple;
 
 exports.getInfoFromId = getInfoFromId;
