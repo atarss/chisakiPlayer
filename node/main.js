@@ -1,23 +1,36 @@
-// var fileName = "/run/media/andy/9868B60F68B5EBDE/mp3lib/ACG/Single/[20140205][ebb and flow][Ray]/01. ebb and flow.mp3";
-var pathName = "/run/media/andy/9868B60F68B5EBDE/mp3lib/ACG/Album/";
+// main.js
+// Starting point for API
+// by Andy 2014
 
-var http = require("http");
-var fs = require('fs');
-var mm = require('musicmetadata');
-var chisakiFile = require("./file.js");
+var apiUtils = require("./utils.js");
+global.apiUtils = apiUtils;
+apiUtils.sysLog("Utils Loaded");
+apiUtils.registerSigint();
 
-var fileList = chisakiFile.getFileFromDirByPattern(pathName, ".mp3");
-var counter = fileList.length;
+// inner lib required.
+var processQueue = require("./processQueue.js").processQueue;
+global.processQueue = processQueue;
+var mainConfigObj = require("./config.js").config;
+global.apiConfig = mainConfigObj;
+apiUtils.sysLog("Configuration File Loaded ('config.js')");
 
-// emitter.setMaxListeners(10)
+var apiDb = require("./db.js");
+apiDb.testAddress(mainConfigObj.mongoServerUrl);
+global.apiDb = apiDb;
+apiUtils.sysLog("Database Driver Loaded.");
+apiUtils.sysLog("Mongodb URI: " + apiConfig.mongoServerUrl);
 
-for (index in fileList) {
-  var fileName = fileList[index];
-  var parser = mm(fs.createReadStream(fileName));
-  parser.thisIndex = index;
+var apiFrame = require("./api.js");
+apiFrame.listen(apiConfig.serverAddress, apiConfig.serverPort);
+apiUtils.sysLog("HTTP Server Ready.");
 
-  parser.on('title', function (result) {
-    parser.stream.close();
-    console.log("[" + this.thisIndex + "] " + result);
-  });
-}
+// var queue = new processQueue();
+// queue.maxWorkers = 5;
+// for (i = 0; i<2; i++) {
+// 	queue.push(function(callback){
+// 		console.log(i);
+// 		callback();
+// 	});
+// }
+
+// queue.startQueue();
