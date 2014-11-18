@@ -1,15 +1,30 @@
 // API : get/file.js
 // By Andy 2014
 var fs = require("fs");
+var spawn = require('child_process').spawn;
 
 exports.worker = function(req, resp) {
 	var query = req.query;
 	if (query.id) {
 		apiDb.getInfoFromId(query.id, function(res){
 			var filePath = res.fileName;
-			var readStream = fs.createReadStream(filePath);
-
-			readStream.pipe(resp);
+			if (query.bitrate) {
+				var br = parseInt(query.bitrate);
+				if ((br >= 8 ) && (br <= 320) && (br % 8 == 0)) {
+					//start to stream
+					var newSpawn = spawn("lame", ["--mp3input", "-b"+br, filePath, "-"]);
+					newSpawn.stdout.pipe(resp);
+				} else {
+					resp.end(JSON.stringify({
+						error : {
+							illegal_bitrate : query.bitrate
+						}
+					}))
+				}
+			} else {
+				var readStream = fs.createReadStream(filePath);
+				readStream.pipe(resp);
+			}
 		});
 	} else {
 		resp.end(JSON.stringify({
