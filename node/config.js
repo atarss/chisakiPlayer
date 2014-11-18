@@ -3,11 +3,12 @@
 
 var config = {
     mongoServerUrl : "mongodb://127.0.0.1:27017/musicLib",
-    serverAddress : "127.0.0.1",
+    serverAddress : "ipv6.atarss.com",
+    ipv6ServerAddress : "ipv6.atarss.com",
     serverPort : 8000,
     indexFolder : "./public/",
     musicLibraryFolder : [
-    	"/run/media/andy/9868B60F68B5EBDE/mp3lib/"
+    	"/home/andy/library/"
     ]
 }
 
