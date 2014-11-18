@@ -12,10 +12,6 @@ exports.worker = function(req, resp) {
 			});
 		}
 
-		resp.end(JSON.stringify({
-			path : apiConfig.musicLibraryFolder,
-			length : newResult.length,
-			result : newResult
-		}));
+		resp.end(JSON.stringify(newResult));
 	});
 }
