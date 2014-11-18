@@ -38,12 +38,12 @@ function listen(address, port) {
 					workerFunc({
 						query : fields,
 						file : files
-					}, resp);
+					}, resp, req);
 				});
 			} else { 
 				//assuming get method.
 				var requestObj = urlParser(req.url, true).query;
-				workerFunc({query : requestObj}, resp);
+				workerFunc({query : requestObj}, resp, req);
 			}
 		} else {
 			apiUtils.sysErr("No such API method : " + urlPath);
