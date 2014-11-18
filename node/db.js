@@ -7,6 +7,22 @@ var BSON = mongo.BSONPure;
 var defaultMongoAddress = apiConfig.mongoServerUrl;
 var isWorking = false;
 
+function checkIdLegal(idStr) {
+	idStr = idStr.toUpperCase();
+	if ((idStr.length==12) || (idStr.length==24)) {
+		for (i in idStr){
+			var c = idStr[i];
+			if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} else {
+		return false;
+	}
+}
+
 var simpleConnection = function(mongoAddress, callback) {
 	mongo.MongoClient.connect(mongoAddress, function(err, db){
 		if (err) {
@@ -94,21 +110,25 @@ var showMusicLibrary = function(callback) {
 // Track Info
 
 var getInfoFromId = function(trackId, callback) {
-	var tmp_id = new BSON.ObjectID(trackId);
-	simpleConnection(defaultMongoAddress, function(db){
-		var dbCollection = db.collection("musicLibrary");
-		dbCollection.findOne({_id : tmp_id}, function(err, doc){
-			db.close();
+	if (checkIdLegal(trackId+"")) {
+		var tmp_id = new BSON.ObjectID(trackId);
+		simpleConnection(defaultMongoAddress, function(db){
+			var dbCollection = db.collection("musicLibrary");
+			dbCollection.findOne({_id : tmp_id}, function(err, doc){
+				db.close();
 
-			if (err) {
-				apiUtils.sysErr(err);
-			} else {
-				if (callback) {
-					callback(doc);
+				if (err) {
+					apiUtils.sysErr(err);
+				} else {
+					if (callback) {
+						callback(doc);
+					}
 				}
-			}
+			});
 		});
-	});
+	} else {
+		callback(null);
+	}
 }
 
 exports.mongo = mongo;
