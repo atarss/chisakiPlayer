@@ -14,24 +14,19 @@ exports.worker = function(req, resp, httpReq) {
 				if (fs.existsSync(filePath)) { // check file exists
 					var fileStream = fs.createReadStream(filePath) 
 					var parser = mm(fileStream);
-					
-					parser.on('picture', function(result){
+
+					parser.on('metadata', function(result){
 						fileStream.destroy();
 
-						result = result[0];
-						if (result) {
-							if (result.data) {
-								if (result.format == "jpg") {
-									resp.writeHead(200, { 'content-type' : 'image/jpeg'	});
-								}
-								resp.end(result.data);
-							} else {
-								apiUtils.httpResponseErr({image_not_exist : filePath} , resp);
+						if (result.picture) {
+							if (result.picture[0].format == "jpg") {
+								resp.writeHead(200, { 'content-type' : 'image/jpeg'	});
 							}
+							resp.end(result.picture[0].data);
 						} else {
 							apiUtils.httpResponseErr({image_not_exist : filePath} , resp);
 						}
-						// resp.end(JSON.stringify(result));
+
 					});
 				} else {
 					// error : file not exist

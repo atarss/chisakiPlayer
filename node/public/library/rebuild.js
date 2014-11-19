@@ -40,7 +40,15 @@ exports.worker = function(req, resp) {
 					parser.fileName = _fileName;
 
 					parser.on('metadata', function (result){
-						result.filePath = this.fileName
+						result.filePath = this.fileName;
+
+						if (! result.artist) {
+							result.artist = [];
+						}
+						if (! result.genre) {
+							result.genre = [];
+						}
+
 						var tmpObj = {
 							title : result.title,
 							album : result.album,

@@ -91,6 +91,32 @@ var rebuildMusicLibrary = function(tagArr, callback) {
 	});
 }
 
+var showMusicLibraryInfo = function(callback) {
+	simpleConnection(defaultMongoAddress, function(db){
+		var dbCollection = db.collection("musicLibrary");
+		dbCollection.find({}, {duration : 1}). toArray(function(err, docs){
+			db.close();
+			if (err) {
+				apiUtils.sysErr(err);
+			} else {
+				var totalTime = 0;
+				for (i in docs) {
+					if (! isNaN(parseInt(docs[i].duration))) {
+						totalTime += docs[i].duration;
+					}
+				}
+
+				if (callback) {
+					callback({
+						library : apiConfig.musicLibraryFolder,
+						totalTime : totalTime
+					});
+				}
+			}
+		})
+	});
+}
+
 var showMusicLibrarySimple = function(callback) {
 	simpleConnection(defaultMongoAddress, function(db){
 		var dbCollection = db.collection("musicLibrary");
@@ -103,7 +129,7 @@ var showMusicLibrarySimple = function(callback) {
 					callback(docs);
 				}
 			}
-		})
+		});
 	});
 }
 
@@ -155,6 +181,7 @@ exports.insertSingleDocument = insertSingleDocument;
 
 exports.clearMusicLibrary = clearMusicLibrary;
 exports.rebuildMusicLibrary = rebuildMusicLibrary;
+exports.showMusicLibraryInfo = showMusicLibraryInfo;
 exports.showMusicLibraryId = showMusicLibraryId;
 exports.showMusicLibrarySimple = showMusicLibrarySimple;
 
