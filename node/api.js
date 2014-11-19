@@ -21,8 +21,8 @@ for (index in fileList){
 	}
 }
 
-function listen(address, port) {
-	http.createServer(function(req, resp){
+function listen(addressArr, port) {
+	var httpListener = function(req, resp){
 		// TODO: Logging All Req to DB or files.
 
 		var urlPath = urlParser(req.url).pathname.slice(1);
@@ -46,15 +46,18 @@ function listen(address, port) {
 				workerFunc({query : requestObj}, resp, req);
 			}
 		} else {
-			apiUtils.sysErr("No such API method : " + urlPath);
-			resp.end(JSON.stringify({
-				error : "No such API method : " + urlPath
-			}));
+			// apiUtils.sysErr("No such API method : " + urlPath);
+			resp.writeHead(404, {'content-type' : 'application/json'});
+			apiUtils.httpResponseErr({ no_such_api_method : urlPath}, resp);
 		}
 
-	}).listen(port, address);
-	apiUtils.sysLog("Start Listening HTTP Server");
-	apiUtils.sysLog("on http://" + address + ":" + port + "/");
+	}
+	//.listen(port, address);
+	for (i in addressArr) {
+		http.createServer(httpListener).listen(port, addressArr[i]);
+		apiUtils.sysLog("Start Listening HTTP Server");
+		apiUtils.sysLog("on http://" + addressArr[i] + ":" + port + "/");
+	}
 
 }
 
