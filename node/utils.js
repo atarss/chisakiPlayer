@@ -55,8 +55,15 @@ var registerSigint = function(func){
 
 var musicLibraryLock = false;
 
+var httpResponseErr = function(errObj, resp){
+	resp.end(JSON.stringify({
+		error : errObj
+	}));
+}
+
 exports.sysLog = sysLog;
 exports.sysErr = sysErr;
 exports.getFileFromDirByPattern = getFileFromDirByPattern;
 exports.registerSigint = registerSigint;
 exports.musicLibraryLock = musicLibraryLock;
+exports.httpResponseErr = httpResponseErr;

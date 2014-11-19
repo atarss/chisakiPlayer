@@ -9,40 +9,39 @@ exports.worker = function(req, resp, httpReq) {
 		apiDb.getInfoFromId(query.id, function(res){
 			if (res) {
 				var filePath = res.fileName;
-				if (query.bitrate) {
-					var br = parseInt(query.bitrate);
-					if ((br >= 8 ) && (br <= 320) && (br % 8 == 0)) {
-						//start to stream
-						var newSpawn = spawn("lame", ["--mp3input", "-b"+br, filePath, "-"]);
-						newSpawn.stdout.pipe(resp);
+				if (fs.existsSync(filePath)) { // check file exists
+					if (query.bitrate) {
+						var br = parseInt(query.bitrate);
+						if ((br >= 8 ) && (br <= 320) && (br % 8 == 0)) { // check bitrate
+							//start to stream
+							resp.writeHead(200, {'content-type' : 'audio/mpeg'});
+							var newSpawn = spawn("lame", ["--mp3input", "-b"+br, filePath, "-"]);
+							newSpawn.stdout.pipe(resp);
 
-						httpReq.on("close", function(){
-							newSpawn.kill();
-						});
+							httpReq.on("close", function(){
+								newSpawn.kill();
+							});
+
+							httpReq.on("end", function(){
+								newSpawn.kill();
+							});
+						} else {
+							apiUtils.httpResponseErr({ illegal_bitrate : query.bitrate } , resp);
+						}
 					} else {
-						resp.end(JSON.stringify({
-							error : {
-								illegal_bitrate : query.bitrate
-							}
-						}));
+						var readStream = fs.createReadStream(filePath);
+						readStream.pipe(resp);
 					}
 				} else {
-					var readStream = fs.createReadStream(filePath);
-					readStream.pipe(resp);
+					// error : file not exist
+					apiUtils.httpResponseErr({file_not_exist : filePath} , resp);
 				}
 			} else {
-				resp.end(JSON.stringify({
-					error : {
-						illegal_id : query.id
-					}
-				}));
+				// error : ID illegal
+				apiUtils.httpResponseErr({illegal_id : query} , resp);
 			}
 		});
 	} else {
-		resp.end(JSON.stringify({
-			error : {
-				missing_argument : "id"
-			}
-		}));
+		apiUtils.httpResponseErr({ missing_argument : "id" }, resp);
 	}
 }
