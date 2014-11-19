@@ -3,7 +3,7 @@
 
 var config = {
     mongoServerUrl : "mongodb://127.0.0.1:27017/musicLib",
-    serverAddress : "ipv6.atarss.com",
+    serverAddress : "0.0.0.0",
     ipv6ServerAddress : "ipv6.atarss.com",
     serverPort : 8000,
     indexFolder : "./public/",
