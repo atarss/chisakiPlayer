@@ -1,4 +1,4 @@
-// API : detection/detect.js
+// API : library/info.js
 // By Andy 2014
 var util = require('util');
 

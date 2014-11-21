@@ -1,10 +1,10 @@
-// API : list/simple.js
+// API : list/full.js
 // By Andy 2014
-// Display All Tracks in Media Library, show simple infomation
+// Display All Tracks in Media Library
 
 exports.worker = function(req, resp) {
 
-	apiDb.showMusicLibrarySimple(function(result){
+	apiDb.showMusicLibraryFull(function(result){
 		var newResult = [];
 		for (i in result) {
 			newResult.push({
@@ -13,7 +13,11 @@ exports.worker = function(req, resp) {
 				album : result[i].album,
 				albumId : result[i].albumId,
 				artist : result[i].artist,
-				duration : result[i].duration
+				albumArtist : result[i].albumArtist,
+				duration : result[i].duration,
+				track : result[i].track,
+				disk : result[i].disk,
+				fileName : result[i].fileName
 			});
 		}
 

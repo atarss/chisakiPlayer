@@ -1,4 +1,4 @@
-// API : get/info.js
+// API : get/track.js
 // By Andy 2014
 
 exports.worker = function(req, resp, httpReq) {
