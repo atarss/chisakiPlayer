@@ -1,13 +1,6 @@
 // main.js
 // Starting point for API
 // by Andy 2014
-var log4js = require('log4js');
-var log = log4js.getLogger();
-global.log = log;
-log.debug("Test Debug");
-log.info("Test Info");
-log.error("Test Error");
-log.warn("Test Warning");
 
 var apiUtils = require("./utils.js");
 global.apiUtils = apiUtils;
