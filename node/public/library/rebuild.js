@@ -143,7 +143,7 @@ exports.worker = function(req, resp) {
 
 					resp.end(JSON.stringify({
 						time : endTime - startTime,
-						path : apiConfig.musicLibraryFolder
+						path : apiConfig.musicLibraryFolder,
 						length : result.length
 					}));
 

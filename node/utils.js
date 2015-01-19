@@ -1,4 +1,5 @@
 var fs = require("fs");
+var path  = require('path');
 
 var sysLog = function(str) {
 	console.log(Date() + " [LOG] " + str);
