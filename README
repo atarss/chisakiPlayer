@@ -1,1 +1,4 @@
 A mp3 player with node.js back-end.
+
+Require : 
+formidable mongodb
