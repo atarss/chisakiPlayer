@@ -1,6 +1,7 @@
 var fs = require("fs");
 var path  = require('path');
 var colors = require('colors/safe');
+var crypto = require('crypto');
 
 var getFormattedDate = function(date){
 	if (! date) {
@@ -43,6 +44,12 @@ var sysErr = function(str) {
 
 var sysDebug = function(str) {
 	console.log(colors.yellow(getFormattedDate() + " [DEBUG] " + str));
+};
+
+var md5Hash = function(str) {
+	var m = crypto.createHash('md5');
+	m.update(str);
+	return m.digest('hex');
 };
 
 function strIsEndWith(longStr, shortStr) {
@@ -96,6 +103,8 @@ var httpResponseErr = function(errObj, resp){
 
 exports.sysLog = sysLog;
 exports.sysErr = sysErr;
+exports.sysDebug = sysDebug;
+exports.md5Hash = md5Hash;
 exports.getFileFromDirByPattern = getFileFromDirByPattern;
 exports.registerSigint = registerSigint;
 exports.musicLibraryLock = musicLibraryLock;

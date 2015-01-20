@@ -8,7 +8,8 @@ var config = {
     indexFolder : "./public/",
     musicLibraryFolder : [
     	"/home/andy/library/"
-    ]
+    ],
+    tmpFolder : "/home/andy/tmp/"
 }
 
 exports.config = config;
