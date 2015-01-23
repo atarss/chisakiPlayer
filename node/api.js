@@ -51,7 +51,7 @@ function listen(addressArr, port) {
 			apiUtils.httpResponseErr({ no_such_api_method : urlPath}, resp);
 		}
 
-	}
+	};
 	//.listen(port, address);
 	for (i in addressArr) {
 		http.createServer(httpListener).listen(port, addressArr[i]);

@@ -17,7 +17,7 @@ var processQueue = function(){
 
 	this._timerId = -1; //no timer ID at first
 	return this;
-}
+};
 
 processQueue.prototype.push = function(processFunc) {
 	// Your Function 'processFunc' should have callback() part in it.
